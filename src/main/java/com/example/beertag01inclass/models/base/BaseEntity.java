@@ -1,4 +1,4 @@
-package com.example.beertag01inclass.models;
+package com.example.beertag01inclass.models.base;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
