@@ -7,11 +7,11 @@ import java.util.List;
 public interface BeerService {
     List<Beer> getAllBeers();
 
-    void addBeer(Beer beer);
+    void createBeer(Beer beer);
 
     Beer getBeerById(long id);
 
     void deleteBeerById(long id);
 
-    Beer updateBeer(long id, Beer beer);
+    Beer updateBeer(Beer beer);
 }

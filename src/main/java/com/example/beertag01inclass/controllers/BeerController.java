@@ -39,10 +39,10 @@ public class BeerController {
     @PostMapping
     public Beer create(@Valid @RequestBody Beer beer) {
         try {
-            beerService.addBeer(beer);
+            beerService.createBeer(beer);
             return beer;
         } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
@@ -55,14 +55,14 @@ public class BeerController {
         }
     }
 
-    @PutMapping("/{id}")
-    public Beer updateBeer(@Valid @PathVariable("id") long id,@Valid @RequestBody Beer beer){
+    @PutMapping
+    public Beer updateBeer(@Valid @RequestBody Beer beer){
         try {
-            return beerService.updateBeer(id, beer);
+            return beerService.updateBeer(beer);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (EntityExistsException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ex.getMessage());
         }
     }
 }

@@ -5,11 +5,8 @@ import com.example.beertag01inclass.exceptions.EntityNotFoundException;
 import com.example.beertag01inclass.models.Beer;
 import com.example.beertag01inclass.repositories.BeerRepository;
 import com.example.beertag01inclass.services.BeerService;
-import jakarta.persistence.EntityExistsException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +15,9 @@ import java.util.Optional;
 public class BeerServiceImpl implements BeerService {
 
     private final BeerRepository beerRepository;
+    private ObjectMapper mapper;
 
-    @Autowired
+
     public BeerServiceImpl(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
     }
@@ -30,7 +28,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void addBeer(Beer beer) {
+    public void createBeer(Beer beer) {
         Optional<Beer> current = beerRepository.findByName(beer.getName());
 
         if (current.isPresent()) {
@@ -52,14 +50,10 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Beer updateBeer(long id, Beer beer) {
-        Beer beerToUpdate = findBeerById(id);
+    public Beer updateBeer(Beer beer) {
+        Beer beerToUpdate = findBeerById(beer.getId());
 
-        if (!beerToUpdate.getName().equals(beer.getName())){
-            throw new EntityExistsException(
-                    String.format("No eer with name %s at this position", beer.getName()));
-        }
-
+        beerToUpdate.setName(beer.getName());
         beerToUpdate.setAbv(beer.getAbv());
 
         beerRepository.saveAndFlush(beerToUpdate);
